@@ -34,6 +34,7 @@
 		}
 		else
 		{
+
 			cerrarBBDD($conexion);
 			return false;
 		}
@@ -43,26 +44,26 @@
 							////////////////////////////////////////////////////////////////////////
 							////////////////////////     Sacar coordenadas  ////////////////////////
 							////////////////////////////////////////////////////////////////////////
-	function coordenadasRestaurante( $muni )
+	function coordenadasRestaurante( $muni  , $distanciamapa)
 	{		
 		
 		
+		$distanciamapa=str_replace("+", "", $distanciamapa);
+		echo $distanciamapa;
 		$datos=municipios($muni);
 		$coord=split("@" ,$datos);
-		echo $datos;
 		$chorizo=ordensql("select nombre,direccion, LAT, lng from restaurantes");
 		$misPuntos= array();
 		if($chorizo!=false)
 		{
-				
+			
 			$contador=0;
 			while ($registro = $chorizo->fetch_array()) {
 				
 				$distancia=distanciaGeodesica($coord[0] , $coord[1] ,  $registro[2] ,$registro[3]);
 				
-				if($distancia<0.3)
+				if($distancia<$distanciamapa)
 				{
-					
 					echo $registro[0]."<asd>".$registro[1]."<asd>".$registro[2]."<asd>icon1<asd>".$registro[3]."$";
 					$contador++;
 				}				
@@ -74,19 +75,26 @@
 		$municipios=str_replace("+", "", $municipios);
 
 		$municipios=str_replace("@", "", $municipios);
+		$contador=0;
 		$chorizo=ordensql("select latitud , longitud  from municipios where municipio='".$municipios."'");
 		if($chorizo!=false)
 		{
-			$contador=0;
+			
 			while ($registro = $chorizo->fetch_array()) {
 
-				$coordenadas=$registro[0]."@".$registro[1];
-				$coordenadasPosicion=$registro[0].",".$registro[1];
+				$coordenadas=$registro[0]."@".$registro[1];//para las funciones de restaurantes hoteles...S
+				$coordenadasPosicion=$registro[0].",".$registro[1];//para que salga en JS
 				echo $coordenadasPosicion;
+
 				return $coordenadas;
-				
+				$contador++;	
 			}
 		}
+		/*if($contador==0)//Cuando falla la orden sql 
+		{	
+			 echo "alert('Municipio introducido erroneamente');";  
+			return false;
+		}*/
 
 	}
 

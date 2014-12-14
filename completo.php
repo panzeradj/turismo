@@ -1,6 +1,48 @@
 
 <?php
+	session_start();
+
 	include("funciones.php");
+
+	
+	
+	if( $_POST['municipio']=="")
+	{
+		$_SESSION['municipio']='valladolid';
+	}
+	else{
+		$_SESSION['municipio']=$_POST['municipio'];		
+	}
+
+
+	$_SESSION['distancia']=$_POST['distancia'];
+	$distancia=$_POST['distancia'];
+	if($distancia[0]!=null)
+	{
+		//echo "distancia 0".$distancia[0];
+		$_SESSION['distancia']=$distancia[0];
+	}
+	else
+	{
+		if($distancia[1]!=null)
+		{
+			//echo "distancia 1".$distancia[1];
+			$_SESSION['distancia']=$distancia[1];
+		}
+		else
+		{
+			if($distancia[2]!=null)
+			{
+				//echo "distancia 2".$distancia[2];
+				$_SESSION['distancia']=$distancia[2];
+			}
+			else
+			{
+				$_SESSION['distancia']=0.5;
+			}
+		}
+	}
+
 ?>
 
 <!DOCTYPE html>
@@ -16,21 +58,26 @@
 		</script>
 
 	<script type="text/javascript">
+		var distancia="<?php echo $dis;?>";
 		
-		var datos="<?php  coordenadasRestaurante( "+valladolid+" );?>";//meto las coordenadas mias o de donde quieren buscar 
-		var misPuntos= new Array();
-		var a=datos.split("$");
-		var count=0;
+		var datos="<?php  coordenadasRestaurante( $_SESSION['municipio'],$_SESSION['distancia'] );?>";//meto las coordenadas mias o de donde quieren buscar 
 		
-		while (a[count]!=null)
-		{
-			var b=a[count].split("<asd>");	
-			misPuntos[count] = [""+b[0],""+b[2], ""+b[4],""+b[3], ""+b[0] +"<br><a href=#>Como llegar a la posicion</a>"];
-			count++;
-		}
+			var misPuntos= new Array();
+			var a=datos.split("$");
+			var count=0;
+			
+			while (a[count]!=null)
+			{
+				var b=a[count].split("<asd>");	
+				misPuntos[count] = [""+b[0],""+b[2], ""+b[4],""+b[3], ""+b[0] +"<br><a href=#>Como llegar a la posicion</a>"];
+				count++;
+			}
+		
+		
 		function inicializaGoogleMaps() {
 		    // Coordenadas del centro de nuestro recuadro principal
-		  var coordenadas="<?php municipios("+valladolid+" );?>";//para centrar en la posicion donde quieres ir  
+		  
+		  var coordenadas="<?php municipios($_SESSION['municipio'] );?>";//para centrar en la posicion donde quieres ir  
 		  var cor=coordenadas.split(",");
 		  	var x=cor[0];
 		  	var y=cor[1];
@@ -87,7 +134,16 @@
 		<article id="capa-mapa">
 			
 		</article>
-	</section>
+		<form name=a method=POST action=completo.php>
+			<div id="controles">
+			    <label><input type="checkbox" name="distancia[0]" value="0.5"  /> 0.5</label><br />
+			    <label><input type="checkbox" name="distancia[1]" value="1"   /> 1</label><br />
+			     <label><input type="checkbox" name="distancia[2]" value="5"  /> 5</label><br />
+			     <input type=text name=municipio>
+			     <input type=submit name=boton value=boton>
+			</div>
+		</form>
+		</section>
 	<footer></footer>
 </body>
 </html>
