@@ -6,9 +6,9 @@
 
 	
 	
-	if( $_POST['municipio']=="")
+	if( $_POST['municipio']=="")//pasar por sesion la localidad
 	{
-		$_SESSION['municipio']='valladolid';
+		//$_SESSION['municipio']='valladolid';
 	}
 	else{
 		$_SESSION['municipio']=$_POST['municipio'];		
@@ -58,8 +58,7 @@
 		</script>
 
 	<script type="text/javascript">
-		var distancia="<?php echo $dis;?>";
-		
+		var distancia="<?php echo $dis;?>";		
 		var datos="<?php  coordenadasRestaurante( $_SESSION['municipio'],$_SESSION['distancia'] );?>";//meto las coordenadas mias o de donde quieren buscar 
 		
 			var misPuntos= new Array();
@@ -84,7 +83,7 @@
 		    var mapOptions = {
 		        zoom: 12,
 		        center: new google.maps.LatLng(x, y),
-		        mapTypeId: google.maps.MapTypeId.ROADMAP
+		        mapTypeId: google.maps.MapTypeId.HYBRID
 		    }
 
 		    var map = new google.maps.Map(document.getElementById("capa-mapa"), mapOptions);
@@ -122,7 +121,6 @@
 		        });
 		    }
 		}
-
 		inicializaGoogleMaps();
 	</script>
 </head>
