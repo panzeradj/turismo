@@ -56,7 +56,6 @@
 		$misPuntos= array();
 		if($chorizo!=false)
 		{
-			
 			$contador=0;
 			while ($registro = $chorizo->fetch_array()) {
 				
@@ -90,11 +89,7 @@
 				$contador++;	
 			}
 		}
-		/*if($contador==0)//Cuando falla la orden sql 
-		{	
-			 echo "alert('Municipio introducido erroneamente');";  
-			return false;
-		}*/
+	
 
 	}
 
